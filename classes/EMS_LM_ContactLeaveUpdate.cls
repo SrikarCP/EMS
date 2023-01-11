@@ -194,7 +194,15 @@ else{ //if contact Id is null(For Org Users(Like Sys Admin Profiles)) we will re
       } 
       system.debug(query); 
       if(Status !='' && Status != null){
-         query = query + ' AND EMS_LM_Status__c = :Status';
+         if(Status == 'Pending'){
+            String status1 = 'Pending';
+            String status2 = 'Approver 1 Pending';
+            String status3 = 'Approver 2 Pending';
+            query = query + ' AND (EMS_LM_Status__c = :status1 OR EMS_LM_Status__c = :status2  OR EMS_LM_Status__c = :status3) ' ;
+         }
+         else{
+            query = query + ' AND EMS_LM_Status__c = :Status';
+         }         
       } 
       system.debug(query); 
       if(name !='' && name != null){  
@@ -232,7 +240,15 @@ else{ //if contact Id is null(For Org Users(Like Sys Admin Profiles)) we will re
       } 
       system.debug(query); 
       if(Status !='' && Status != null){
-         query = query + ' AND EMS_LM_Status__c = :Status';
+         if(Status == 'Pending'){
+            String status1 = 'Pending';
+            String status2 = 'Approver 1 Pending';
+            String status3 = 'Approver 2 Pending';
+            query = query + ' AND (EMS_LM_Status__c = :status1 OR EMS_LM_Status__c = :status2  OR EMS_LM_Status__c = :status3) ' ;
+         }
+         else{
+            query = query + ' AND EMS_LM_Status__c = :Status';
+         }      
       } 
       system.debug(query); 
       if(name !='' && name != null){  
