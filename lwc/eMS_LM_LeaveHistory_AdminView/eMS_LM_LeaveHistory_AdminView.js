@@ -5,6 +5,7 @@ import approveApproval from '@salesforce/apex/EMS_LM_ApprovalProcessUpdate.appro
 import rejectApproval from '@salesforce/apex/EMS_LM_ApprovalProcessUpdate.rejectApproval';
 import u_Id from '@salesforce/user/Id';
 import LightningConfirm from "lightning/confirm";
+import { refreshApex } from '@salesforce/apex';
 
 export default class EMS_LM_LeaveHistory_AdminView extends LightningElement {
   @track empName = '';    
@@ -20,6 +21,7 @@ export default class EMS_LM_LeaveHistory_AdminView extends LightningElement {
   endDate = '';//To filter Leave History end date = '2022-12-20 00:00:00'
   startDate = '';//To filter Leave History start date  = '2022-01-20 00:00:00'
   @track datahistory = [];//to pass data to Leave history table
+  @track datahistory1 = [];//to refresh apex data to Leave history table
  // @track lOptions = [];
   value = '';
   fixedWidth = "width:8rem;";
@@ -31,22 +33,23 @@ export default class EMS_LM_LeaveHistory_AdminView extends LightningElement {
   { label: 'Approver 2 Pending', value: 'Approver 2 Pending' }];
  
   @wire(getAdminLeaveHistory, { name: '$empName', stdate: '$startDate', eddate: '$endDate', status: '$sValue' })
-  wiredLeavHistory({ error, data }) {
-    if (data) {
-      if (data.length>0) {
+  wiredLeavHistory(result) {
+    this.datahistory1 = result;
+    if (result.data) {
+      if (result.data.length>0) {
         this.showdata = true;
         this.nodata = false;
-        this.datahistory = data;
+        this.datahistory = result.data;
         this.error = undefined;
       }
       else {
         this.nodata = true;
         this.showdata = false;
-        this.datahistory = data;
+        this.datahistory = result.data;
         this.error = undefined;
       }
-    } else if (error) {
-      this.error = error;
+    } else if (result.error) {
+      this.error = result.error;
       this.datahistory = undefined;
     }
   }
@@ -117,7 +120,8 @@ export default class EMS_LM_LeaveHistory_AdminView extends LightningElement {
             variant: 'success',
             mode: 'pester'
           }));
-          window.location.reload();
+         // window.location.reload();
+         refreshApex(this.datahistory1);
         })
         .catch(error => {
           window.console.log('Error ====> ' + error);
@@ -127,7 +131,8 @@ export default class EMS_LM_LeaveHistory_AdminView extends LightningElement {
             variant: 'error',
             mode: 'pester'
           }));
-          window.location.reload();
+          //window.location.reload();
+          refreshApex(this.datahistory1);
         });
     }
     else {
@@ -153,7 +158,8 @@ export default class EMS_LM_LeaveHistory_AdminView extends LightningElement {
             variant: 'success',
             mode: 'pester'
           }));
-          window.location.reload();
+          //window.location.reload();
+          refreshApex(this.datahistory1);
         })
         .catch(error => {
           window.console.log('Error ====> ' + error);
@@ -163,7 +169,8 @@ export default class EMS_LM_LeaveHistory_AdminView extends LightningElement {
             variant: 'error',
             mode: 'pester'
           }));
-          window.location.reload();
+          //window.location.reload();
+          refreshApex(this.datahistory1);
         });
     }
     else {
